@@ -2,6 +2,7 @@
     "name": "simettric/besepa-php",
     "require": {
         "php": ">=5.4",
+        "netresearch/jsonmapper": "dev-master",
         "guzzlehttp/guzzle": "5.0.*@dev"
     },
     "autoload": {
