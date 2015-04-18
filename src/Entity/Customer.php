@@ -42,6 +42,8 @@ class Customer implements EntityInterface{
 
     public $id;
 
+    public $status;
+
     function getId(){
         return $this->id;
     }

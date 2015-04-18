@@ -9,6 +9,9 @@
 namespace Besepa;
 
 use Besepa\Entity\EntityInterface;
+use Besepa\Exceptions\ResourceInvalidException;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Stream\Stream;
 use GuzzleHttp\Transaction;
 
 class Client {
@@ -41,6 +44,28 @@ class Client {
         );
     }
 
+    private function  throwException(ClientException $e, $entity_name){
+
+        $error_data = $e->getResponse()->json();
+
+        switch($error_data["error"]){
+            case 'invalid_resource':
+
+                $exception = new ResourceInvalidException("Algunos campos son incorrectos en " . $entity_name);
+                $exception->error_messages = $error_data["messages"];
+
+                throw $exception;
+
+                break;
+
+            default:
+
+                throw new ResourceInvalidException("Petición fallida");
+
+        }
+
+    }
+
     function getMany($path, $entity_name){
 
         try{
@@ -48,13 +73,13 @@ class Client {
              * @var $response \GuzzleHttp\Message\AbstractMessage
              */
             $response = $this->client->get($path);
-            $data     = $response->getBody();
+            $data     = $response->json();
 
             $mapper = new \JsonMapper();
-            return $mapper->mapArray( $data, new \ArrayObject(), $entity_name );
+            return $mapper->mapArray( $data["response"], new \ArrayObject(), $entity_name );
 
-        }catch (\Exception $e){
-
+        }catch (ClientException $e){
+            $this->throwException($e, $entity_name);
         }
 
     }
@@ -66,13 +91,13 @@ class Client {
              * @var $response \GuzzleHttp\Message\AbstractMessage
              */
             $response = $this->client->get($path);
-            $data     = $response->getBody();
+            $data     = $response->json();
 
             $mapper = new \JsonMapper();
-            return $mapper->map( $data, new $entity_name );
+            return $mapper->map( $data["response"], new $entity_name );
 
         }catch (\Exception $e){
-
+            $this->throwException($e, $entity_name);
         }
 
     }
@@ -80,16 +105,23 @@ class Client {
     function create($path, $body_data, $entity_name){
 
         try{
+
+
             /**
-             * @var $response \GuzzleHttp\Message\AbstractMessage
+             * @var $response \GuzzleHttp\Message\Response
              */
-            $response = $this->client->post($path);
-            $data     = $response->getBody();
+            $response  = $this->client->post($path, array(
+                'json' => $body_data
+            ));
+            $data     = $response->json();
 
             $mapper      = new \JsonMapper();
-            return $mapper->map( $data, new $entity_name );
+            return $mapper->map( $data["response"], new $entity_name );
 
-        }catch (\Exception $e){
+        }catch (ClientException $e){
+
+
+            $this->throwException($e, $entity_name);
 
         }
 
@@ -101,14 +133,16 @@ class Client {
             /**
              * @var $response \GuzzleHttp\Message\AbstractMessage
              */
-            $response = $this->client->put($path);
-            $data     = $response->getBody();
+            $response = $this->client->put($path, array(
+                'json' => $body_data
+            ));
+            $data     = $response->json();
 
             $mapper      = new \JsonMapper();
-            return $mapper->map( $data, new $entity_name );
+            return $mapper->map( $data["response"] , new $entity_name );
 
         }catch (\Exception $e){
-
+            $this->throwException($e, $entity_name);
         }
 
     }
@@ -124,7 +158,7 @@ class Client {
             return $response->getStatusCode() == 200;
 
         }catch (\Exception $e){
-
+            $this->throwException($e, null);
         }
 
     }

@@ -30,13 +30,10 @@ class CustomerRepository extends AbstractRepository{
 
         if(!$update){
             unset($data["id"]);
+            unset($data["status"]);
         }
 
-        return json_encode(
-            array(
-                "customer" => $data
-            )
-        );
+        return array( "customer" => $data );
 
 
     }

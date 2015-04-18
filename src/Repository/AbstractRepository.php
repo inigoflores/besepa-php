@@ -24,27 +24,28 @@ abstract class AbstractRepository {
 
     function findAll( $page=1 ){
 
-        $path = "/" . $this->getResourcePath() . "?page=" . $page;
+        $path =  $this->getResourcePath() . "?page=" . $page;
         return $this->client->getMany( $path, $this->getEntityName() );
     }
 
     function find( $id ){
-        $path = "/" . $this->getResourcePath() . "/" . $id;
-        return $this->client->getMany( $path, $this->getEntityName() );
+        $path =  $this->getResourcePath() . "/" . $id;
+        return $this->client->get( $path, $this->getEntityName() );
     }
 
     function create(EntityInterface $entity ){
-        $path = "/" . $this->getResourcePath();
-        return $this->client->create( $path, $this->getRequestData($entity), $this->getEntityName() );
+        $path =  $this->getResourcePath();
+
+        return $this->client->create( $path, $this->getRequestData($entity, false), $this->getEntityName() );
     }
 
     function update(EntityInterface $entity ){
-        $path = "/" . $this->getResourcePath() . "/" . $entity->getId();
+        $path =  $this->getResourcePath() . "/" . $entity->getId();
         return $this->client->update( $path, $this->getRequestData($entity), $this->getEntityName() );
     }
 
     function delete( EntityInterface $entity ){
-        $path = "/" . $this->getResourcePath() . "/" . $entity->getId();
+        $path =  $this->getResourcePath() . "/" . $entity->getId();
         return $this->client->delete( $path );
     }
 
