@@ -20,7 +20,7 @@ class ProductRepository extends AbstractRepository{
 
 
     function create(EntityInterface $entity ){
-        throw new OperationNotPermittedException("You can´t create products with the Besepa API");
+        throw new OperationNotPermittedException("You can´t create products through the Besepa API");
     }
 
     function getResourcePath(){
