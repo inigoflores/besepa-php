@@ -31,7 +31,7 @@ class BankAccountRepository extends AbstractRepository{
 
         if(!$this->customer_id) throw new ResourceInvalidException("Se necesita indicar un id de customer, utilice el método setCustomerId en " . get_class($this));
 
-        return "customers/" . $this->customer_id . "/bank_accounts/";
+        return "customers/" . $this->customer_id . "/bank_accounts";
     }
 
     function create(BankAccount $entity, $send_mandate_email=false){
