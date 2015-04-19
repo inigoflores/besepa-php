@@ -29,7 +29,7 @@ class BankAccount implements EntityInterface{
      * @var Mandate
      */
     public $mandate;
-    
+
 
     /**
      * @param Mandate $mandate

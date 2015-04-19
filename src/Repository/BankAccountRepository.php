@@ -67,10 +67,16 @@ class BankAccountRepository extends AbstractRepository{
 
         $data = json_decode( json_encode($entity), true );
 
-        if(!$update){
-            unset($data["id"]);
-            unset($data["status"]);
+
+
+        if(isset($data["mandate"]) && $data["mandate"]){
+            unset($data["mandate"]["id"]);
+            unset($data["mandate"]["status"]);
         }
+
+        unset($data["id"]);
+        unset($data["status"]);
+
 
         return array( "bank_account" => $data );
 
