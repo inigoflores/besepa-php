@@ -30,6 +30,8 @@ class Debit implements EntityInterface{
 
     public $sent_at;
 
+    public $metadata;
+
     /**
      * @var Customer
      */
