@@ -78,7 +78,9 @@ class Client {
             $mapper = new \JsonMapper();
             return $mapper->mapArray( $data["response"], new \ArrayObject(), $entity_name );
 
+
         }catch (ClientException $e){
+            //$e->getMessage();
             $this->throwException($e, $entity_name);
         }
 
@@ -91,12 +93,15 @@ class Client {
              * @var $response \GuzzleHttp\Message\AbstractMessage
              */
             $response = $this->client->get($path);
-            $data     = $response->json();
+            $data     = $response->json(['object'=>true]);
+            //pr($data);
 
             $mapper = new \JsonMapper();
-            return $mapper->map( $data["response"], new $entity_name );
+            return $mapper->map( $data->response, new $entity_name );
 
-        }catch (\Exception $e){
+        }catch (ClientException $e){
+            //var_dump($e);die();
+
             $this->throwException($e, $entity_name);
         }
 
@@ -113,13 +118,12 @@ class Client {
             $response  = $this->client->post($path, array(
                 'json' => $body_data
             ));
-            $data     = $response->json();
+            $data     = $response->json(['object'=>true]);
 
             $mapper      = new \JsonMapper();
-            return $mapper->map( $data["response"], new $entity_name );
+            return $mapper->map( $data->response, new $entity_name );
 
         }catch (ClientException $e){
-
 
             $this->throwException($e, $entity_name);
 
