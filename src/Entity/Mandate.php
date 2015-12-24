@@ -23,11 +23,15 @@ class Mandate implements  EntityInterface{
 
     public $reference;
 
-    public $schema;
+    public $scheme;
 
     public $used;
 
     public $status;
+
+    public $phone_number;
+
+    public $url;
 
     function getId(){
         return $this->id;
