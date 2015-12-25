@@ -24,6 +24,14 @@ class Debit implements EntityInterface{
 
     public $amount;
 
+    public $currency;
+
+    public $created_at;
+
+    public $error_code;
+
+    public $platform_error_code;
+
     public $debtor_bank_account_id;
 
     public $creditor_bank_account_id;
