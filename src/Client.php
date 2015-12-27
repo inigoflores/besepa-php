@@ -31,7 +31,7 @@ class Client {
                 "base_url" => array(
                     "https://{mode}" . static::ENDPOINT_ROOT,
                     array(
-                        "mode"    => $sandbox_mode ? "sandbox." : "",
+                        "mode"    => $sandbox_mode ? "sandbox." : "api.",
                         "version" => 1
                     )
                 ),
